@@ -1,0 +1,11 @@
+ollama
+chromadb
+# mcp[cli]
+# crewai
+# crewai[tools]
+
+browser-use
+playwright
+langchain-ollama
+pydantic
+asyncio
