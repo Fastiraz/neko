@@ -3,11 +3,10 @@
 
 
 import subprocess
-from typing import Optional, List
-# import re
+from typing import Optional
 
 
-def execute_shell_command(command: str, timeout: Optional[int] = 30) -> str:
+def shell_tool(command: str, timeout: Optional[int] = 30) -> str:
   """
   Executes a shell command and returns the output as a single string.
   This function is designed to be used as a tool for LLM agents to interact with the system.

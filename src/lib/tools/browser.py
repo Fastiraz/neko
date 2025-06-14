@@ -56,7 +56,7 @@ async def on_step_end(agent: Agent):
   print(f"Last action: {history.action_names()[-1] if history.action_names() else 'None'}")
 
 
-async def use_browser(prompt: str) -> AgentHistoryList:
+async def web_browser_tool(prompt: str) -> AgentHistoryList:
   """
   This function allow an AI agent to perform tasks on a browser.
 

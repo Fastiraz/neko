@@ -57,5 +57,4 @@ def load_env(env_path: str = ".env") -> None:
           if (value.startswith('"') and value.endswith('"')) or \
              (value.startswith("'") and value.endswith("'")):
             value = value[1:-1]
-
           os.environ[key] = value

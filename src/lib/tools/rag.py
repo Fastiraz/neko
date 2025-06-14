@@ -210,6 +210,12 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def retrieval(self, prompt: str) -> List[str]:
         """
         Enhanced retrieval function that uses hybrid search.
+        :arg:
+        -----
+          prompt (str): The user prompt
+        :return:
+        --------
+          List[str]: A list of revelant documents
         """
         results = self.hybrid_search(prompt, n_results=5)
         # Filter out low-relevance results (threshold can be adjusted)
@@ -224,4 +230,3 @@ Keep your responses clear, concise, and directly relevant to the user's question
                     source_info = f"\n[Source: {os.path.basename(source)}]"
                 filtered_docs.append(doc + source_info)
         return filtered_docs
-
