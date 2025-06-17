@@ -25,10 +25,19 @@ Neko is an autonomous AI agent specialized in offensive security. It combines th
 
 ---
 
+## Features
+
+- Uncensored LLM
+- Autonomous AI agent
+- Tools
+- - Shell commands execution
+- - RAG for offensive security topics
+- - Browser use
+- - Message interaction with user
+- - Web search (DuckDuckGo, Brave, Google, Tavily)
+
+---
+
 <div align="center">
-  <p>
-    <code>
-      Coming soon...
-    </code>
-  </p>
+  <p><code>Coming soon...</code></p>
 </div>

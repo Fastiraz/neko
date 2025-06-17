@@ -9,7 +9,7 @@ from lib.tools.shell import shell_tool
 from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
 from lib.tools.message import ask_user_tool
-from lib.tools.web_search import WebSearchTool
+from lib.tools.web_search import ddg_search
 from lib.utils.env import load_env, get_system_prompt
 
 
@@ -51,6 +51,7 @@ available_functions = {
   'web_browser_tool': web_browser_tool,
   'rag_tool': rag_tool,
   'ask_user_tool': ask_user_tool,
+  'ddg_search': ddg_search,
 }
 
 
@@ -80,7 +81,8 @@ async def process_model_response(
         shell_tool,
         web_browser_tool,
         rag_tool,
-        ask_user_tool
+        ask_user_tool,
+        ddg_search
       ],
     )
     messages.append(response.message)
@@ -158,7 +160,4 @@ async def main() -> None:
 
 if __name__ == "__main__":
   load_env()
-  # asyncio.run(main())
-  search_engin = WebSearchTool("duckduckgo", None)
-  results = search_engin.run_impl(query="Python web scraping tutorial")
-  print(results)
+  asyncio.run(main())
