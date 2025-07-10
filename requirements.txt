@@ -1,8 +1,8 @@
 ollama
 chromadb
 # mcp[cli]
-# crewai
-# crewai[tools]
+streamlit
+watchdog
 
 browser-use
 playwright
