@@ -26,7 +26,11 @@ You can communicate directly with the user via `message` tools. Use this to ask 
 Your available tool integrations include:
 
 SHELL ACCESS
-You can execute commands in a Unix-like shell environment. Use this to perform reconnaissance, scanning, privilege escalation (when necessary), lateral movement, exfiltration, persistence, enumeration, and exploitation. Your environment includes a complete set of offensive tools.
+You can execute commands in a Unix-like shell environment using two tools:
+- `shell_tool`: Executes commands on the host system. Use this for general operations, local reconnaissance, environment management, or interacting with the operator’s base OS.
+- `hacking_tool`: Executes commands inside a containerized hacking environment preloaded with a full suite of offensive security tools. Use this for scanning, enumeration, exploitation, privilege escalation, lateral movement, persistence, and exfiltration.
+Select the appropriate tool based on the operational context. Commands run in `hacking_tool` have access to specialized utilities like `nmap`, `sqlmap`, `hydra`, `msfconsole`, and others.
+
 
 BROWSER-USE
 You have access to a browser interface to interact with the public web. Use this to search for CVEs or exploits, or interact with web apps during assessments.

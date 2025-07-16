@@ -5,7 +5,7 @@ import os
 import ollama
 import asyncio
 from typing import List, Dict, Any
-from lib.tools.shell import shell_tool
+from lib.tools.shell import shell_tool, hacking_tool
 from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
 from lib.tools.message import ask_user_tool
@@ -48,6 +48,7 @@ def rag_tool(query: str) -> str:
 
 available_functions = {
   'shell_tool': shell_tool,
+  'hacking_tool': hacking_tool,
   'web_browser_tool': web_browser_tool,
   'rag_tool': rag_tool,
   'ask_user_tool': ask_user_tool,
@@ -79,6 +80,7 @@ async def process_model_response(
       think=False,
       tools=[
         shell_tool,
+        hacking_tool,
         web_browser_tool,
         rag_tool,
         ask_user_tool,
