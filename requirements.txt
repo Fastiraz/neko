@@ -9,3 +9,5 @@ playwright
 langchain-ollama
 pydantic
 asyncio
+
+openai-whisper
