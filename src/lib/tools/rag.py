@@ -35,6 +35,13 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def load(self, directory: str = "datasets", allowed_extensions: List[str] = None) -> List[str]:
         """
         Recursively loads files from a directory.
+
+        Args:
+          directory (str): Path to the datasets directory.
+          allowed_extensions(List[str]): List of allowed extensions.
+
+        Returns:
+          List[str]: Loaded text from the datasets.
         """
         if allowed_extensions is None:
             allowed_extensions = [".md", ".txt", ".c", ".cpp", ".py", ".asm"]
@@ -59,6 +66,13 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def chunk(self, chunk_size: int = 500, overlap: int = 100) -> List[str]:
         """
         Splits documents into overlapping chunks with improved chunking strategy.
+
+        Args:
+          chunk_size (int): Size of each chunks.
+          overlap (int):
+
+        Returns:
+          List[str]: Chunked text.
         """
         self.chunks = []
         self.metadata = []
@@ -108,6 +122,12 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def embedding(self, text: str) -> List[float]:
         """
         Get a single embedding vector from Ollama.
+
+        Args:
+          text (str): The text to get the embeddings from.
+
+        Returns:
+          List[float]: A list of embeddings.
         """
         try:
             result = ollama.embed(
@@ -163,6 +183,13 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def semantic_search(self, query: str, n_results: int = 5) -> Dict[str, Any]:
         """
         Perform semantic search using embeddings.
+
+        Args:
+          query (str): The search query.
+          n_results (int): Number of results.
+
+        Returns:
+          Dict[str, Any]:
         """
         emb = self.embedding(query)
         if not emb:
@@ -183,6 +210,16 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def hybrid_search(self, query: str, n_results: int = 5) -> Dict[str, Any]:
         """
         Combine semantic search with keyword matching for better retrieval.
+
+        Args:
+          query (str): The search query.
+          n_results (int): Number of results.
+
+        Returns:
+          Dict[str, Any]: A dictionary containing the following keys:
+            - 'documents' (List[str]): The reranked documents based on hybrid scoring.
+            - 'scores' (List[float]): Combined scores (semantic + keyword boost).
+            - 'metadatas' (List[Dict]): Metadata associated with each document.
         """
         # Semantic search results
         semantic_results = self.semantic_search(query, n_results=n_results)
@@ -210,11 +247,11 @@ Keep your responses clear, concise, and directly relevant to the user's question
     def retrieval(self, prompt: str) -> List[str]:
         """
         Enhanced retrieval function that uses hybrid search.
-        :arg:
-        -----
+
+        Args:
           prompt (str): The user prompt
-        :return:
-        --------
+
+        Returns:
           List[str]: A list of revelant documents
         """
         results = self.hybrid_search(prompt, n_results=5)

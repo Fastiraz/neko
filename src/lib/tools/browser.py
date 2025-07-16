@@ -32,6 +32,15 @@ controller = Controller()
 
 @controller.action('Ask human for help with a question')
 def ask_human(question: str) -> ActionResult:
+  """
+  Allow a LLM to ask a question to a human.
+
+  Args:
+    question (str): The question.
+
+  Returns:
+    ActionResult: The human's answer.
+  """
   answer = input(f'\x1b[48;5;235m\x1b[91m{question}\x1b[0m\n> ')
   return ActionResult(extracted_content=f'The human responded with: {answer}', include_in_memory=True)
 
@@ -60,9 +69,11 @@ async def web_browser_tool(prompt: str) -> AgentHistoryList:
   """
   This function allow an AI agent to perform tasks on a browser.
 
-  :args:
-  ------
+  Args:
     prompt (str): The task to do on the browser.
+
+  Returns:
+    AgentHistoryList: Browser task history.
   """
   config = BrowserConfig(
     headless=False,

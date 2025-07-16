@@ -17,12 +17,10 @@ def rag_tool(query: str) -> str:
   """
   Combines retrieval and generation with improved prompt formatting.
 
-  :args:
-  ------
+  Args:
     prompt (str): The query to search in vectorial database
 
-  :return:
-  --------
+  Returns:
     str: The LLM's response.
   """
   rag = RAG()
@@ -63,13 +61,13 @@ async def process_model_response(
 ) -> str:
   """
   Process model response and handle tool calls iteratively
-  :args:
-  ------
+
+  Args:
     client (ollama.AsyncClient): The Ollama async client instance
     messages (List[Dict[str, Any]]): List of messages with role/content
     max_iterations (int): Maximum number of iterations to prevent infinite loops
-  :return:
-  --------
+
+  Returns:
     List[Dict[str, Any]]: Updated messages list with all interactions
   """
   iteration = 0
@@ -118,7 +116,10 @@ async def process_model_response(
   return messages
 
 
-def create_vdb_if_needed():
+def create_vdb_if_needed() -> None:
+  """
+  Create the vector database if it does not already exist.
+  """
   VECTOR_DB_PATH = os.getenv("VECTOR_DB_PATH", "vectordb")
   DATASETS_PATH = os.getenv("DATASETS_PATH", "datasets")
   rag = RAG(VECTOR_DB_PATH)
@@ -133,6 +134,9 @@ def create_vdb_if_needed():
 
 
 async def main() -> None:
+  """
+  The main function.
+  """
   create_vdb_if_needed()
   messages = [
     {

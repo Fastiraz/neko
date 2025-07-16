@@ -10,8 +10,7 @@ def env_info() -> Tuple[str,str]:
   """
   Returns the operating system name and the default shell.
 
-  :return:
-  --------
+  Returns:
     A tuple containing the OS name and the default shell.
   """
   os_name = __import__('platform').system()
@@ -23,12 +22,10 @@ def get_system_prompt(file_path: str = "knowledge/prompt.txt") -> str:
   """
   Returns the system prompt for the AI agent.
 
-  :args:
-  ------
+  Args:
     file_path (str): The system prompt file path.
 
-  :return:
-  --------
+  Returns:
     str: A string containing the content of the system prompt file.
   """
   with open(file_path, 'r', encoding='utf8') as file:
@@ -42,8 +39,7 @@ def load_env(env_path: str = ".env") -> None:
   """
   Load environment variables from the `.env` file.
 
-  :arg:
-  -----
+  Args:
     env_path (str): The path to the `.env` file.
   """
   with open(env_path, 'r', encoding='utf8') as file:
