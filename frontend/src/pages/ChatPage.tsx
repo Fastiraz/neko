@@ -1,39 +1,43 @@
-import { useRef, type FormEvent } from "react";
+import React, { useState } from "react";
+import ChatForm from "../components/forms/ChatForm";
+import MessageBox from "../components/common/MessageBox";
+import { sendMessageToAgent } from "../services/chatService";
 
-export function Chat() {
-  const responseInputRef = useRef<HTMLTextAreaElement>(null);
+type ChatMessage = {
+  sender: "me" | "agent";
+  text: string;
+};
 
-  const testEndpoint = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+export default function ChatPage() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSend = async (prompt: string) => {
+    setMessages((prev) => [...prev, { sender: "me", text: prompt }]);
+    setIsLoading(true);
 
     try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-      const endpoint = formData.get("endpoint") as string;
-      const url = new URL(endpoint, location.href);
-      const method = formData.get("method") as string;
-      const res = await fetch(url, { method });
-
-      const data = await res.json();
-      responseInputRef.current!.value = JSON.stringify(data, null, 2);
+      const reply = await sendMessageToAgent(prompt);
+      setMessages((prev) => [...prev, { sender: "agent", text: reply }]);
     } catch (error) {
-      responseInputRef.current!.value = String(error);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "agent", text: "⚠️ Error: Failed to get response." },
+      ]);
+      console.error("Chat error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="api-tester">
-      <form onSubmit={testEndpoint} className="endpoint-row">
-        <select name="method" className="method">
-          <option value="GET">GET</option>
-          <option value="PUT">PUT</option>
-        </select>
-        <input type="text" name="endpoint" defaultValue="/api/hello" className="url-input" placeholder="/api/hello" />
-        <button type="submit" className="send-button">
-          Send
-        </button>
-      </form>
-      <textarea ref={responseInputRef} readOnly placeholder="Response will appear here..." className="response-area" />
+    <div className="flex flex-col h-screen bg-gray-100">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        {messages.map((msg, i) => (
+          <MessageBox key={i} message={msg.text} sender={msg.sender} />
+        ))}
+      </div>
+      <ChatForm onSend={handleSend} disabled={isLoading} />
     </div>
   );
 }

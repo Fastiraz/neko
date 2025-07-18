@@ -1,30 +1,43 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
 
-type LoginFormInputs = {
-  email: string;
-  password: string;
+type LoginFormProps = {
+  onSubmit: (data: { email: string; password: string }) => void;
 };
 
-export default function LoginForm({
-  onSubmit,
-}: {
-  onSubmit: (data: LoginFormInputs) => void;
-}) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormInputs>();
+export default function LoginForm({ onSubmit }: LoginFormProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newErrors: typeof errors = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await onSubmit({ email, password });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="max-w-sm mx-auto p-6 bg-white rounded-xl shadow space-y-4"
+      onSubmit={handleSubmit}
+      className="max-w-sm w-full p-6 bg-white rounded-xl shadow-md space-y-4"
     >
-      <h2 className="text-2xl font-bold text-center">Login</h2>
+      <h2 className="text-2xl font-semibold text-center">Login</h2>
 
       <div>
         <label htmlFor="email" className="block mb-1 font-medium">
@@ -33,12 +46,13 @@ export default function LoginForm({
         <Input
           id="email"
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          {...register("email", { required: "Email is required" })}
         />
-        {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+        {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
       </div>
-
+      <br />
       <div>
         <label htmlFor="password" className="block mb-1 font-medium">
           Password
@@ -46,14 +60,13 @@ export default function LoginForm({
         <Input
           id="password"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          {...register("password", { required: "Password is required" })}
         />
-        {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
-        )}
+        {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
       </div>
-
+      <br />
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? "Logging in..." : "Login"}
       </Button>
