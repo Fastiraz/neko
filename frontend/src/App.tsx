@@ -1,5 +1,8 @@
-import { Login } from "./pages/LoginPage";
-import { Chat } from "./pages/ChatPage";
+import React, { useState } from "react";
+// import { Login } from "./pages/LoginPage";
+// import { Chat } from "./pages/ChatPage";
+import LoginPage from "./pages/LoginPage";
+import ChatPage from "./pages/ChatPage";
 import "./index.css";
 
 import logo from "./logo.svg";
@@ -7,17 +10,19 @@ import reactLogo from "./react.svg";
 
 export function App() {
   let content;
-  let isLoggedIn = false;
-
-  if (isLoggedIn) {
-    content = <Chat />;
-  } else {
-    content = <Login />;
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
 
   return (
     <div className="app">
       {content}
+      {isLoggedIn ? (
+        <ChatPage />
+      ) : (
+        <LoginPage onLoginSuccess={handleLoginSuccess} />
+      )}
     </div>
 
     // <div className="app">

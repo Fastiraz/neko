@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: "JetBrains Mono";
   line-height: 1.5;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -160,6 +162,25 @@ code {
   transform: translateY(-1px);
   cursor: pointer;
 }
+
+.input-area {
+  width: 100%;
+  background: #1a1a1a;
+  border: 2px solid #fbf0df;
+  border-radius: 12px;
+  padding: 0.75rem;
+  color: #fbf0df;
+  font: monospace;
+  resize: vertical;
+  box-sizing: border-box;
+}
+.input-area:focus {
+  border-color: #f3d5a3;
+}
+.input-area::placeholder {
+  color: rgba(251, 240, 223, 0.4);
+}
+
 .response-area {
   width: 100%;
   min-height: 120px;
