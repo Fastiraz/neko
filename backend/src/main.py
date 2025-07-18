@@ -6,6 +6,7 @@ import ollama
 import asyncio
 from typing import List, Dict, Any
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from lib.tools.shell import shell_tool, hacking_tool
 from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
@@ -15,6 +16,16 @@ from lib.utils.env import load_env, get_system_prompt
 
 
 app = FastAPI()
+origins = [
+  "http://localhost:3000",
+]
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=origins,  # or ["*"] to allow all (dev only)
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 
 def rag_tool(query: str) -> str:
