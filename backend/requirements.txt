@@ -1,6 +1,6 @@
 ollama
 chromadb
-# mcp[cli]
+mcp[cli]
 streamlit
 watchdog
 

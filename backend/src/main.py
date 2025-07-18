@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
 import os
 import ollama
 import asyncio
-import streamlit as st
 from typing import List, Dict, Any
-from lib.tools.shell import shell_tool
+from fastapi import FastAPI, Request
+from lib.tools.shell import shell_tool, hacking_tool
 from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
 from lib.tools.message import ask_user_tool
@@ -15,16 +14,17 @@ from lib.tools.web_search import ddg_search
 from lib.utils.env import load_env, get_system_prompt
 
 
+app = FastAPI()
+
+
 def rag_tool(query: str) -> str:
   """
   Combines retrieval and generation with improved prompt formatting.
 
-  :args:
-  ------
+  Args:
     prompt (str): The query to search in vectorial database
 
-  :return:
-  --------
+  Returns:
     str: The LLM's response.
   """
   rag = RAG()
@@ -50,6 +50,7 @@ def rag_tool(query: str) -> str:
 
 available_functions = {
   'shell_tool': shell_tool,
+  'hacking_tool': hacking_tool,
   'web_browser_tool': web_browser_tool,
   'rag_tool': rag_tool,
   'ask_user_tool': ask_user_tool,
@@ -64,13 +65,13 @@ async def process_model_response(
 ) -> str:
   """
   Process model response and handle tool calls iteratively
-  :args:
-  ------
+
+  Args:
     client (ollama.AsyncClient): The Ollama async client instance
     messages (List[Dict[str, Any]]): List of messages with role/content
     max_iterations (int): Maximum number of iterations to prevent infinite loops
-  :return:
-  --------
+
+  Returns:
     List[Dict[str, Any]]: Updated messages list with all interactions
   """
   iteration = 0
@@ -81,6 +82,7 @@ async def process_model_response(
       think=False,
       tools=[
         shell_tool,
+        hacking_tool,
         web_browser_tool,
         rag_tool,
         ask_user_tool,
@@ -89,19 +91,16 @@ async def process_model_response(
     )
     messages.append(response.message)
     if response.message.tool_calls:
-      st.toast(
-        body=f"\n--- Processing {len(response.message.tool_calls)} tool call(s) ---",
-        icon=None
-      )
+      print(f"\n--- Processing {len(response.message.tool_calls)} tool call(s) ---")
       for tool in response.message.tool_calls:
         if function_to_call := available_functions.get(tool.function.name):
-          st.toast(f'Calling function: {tool.function.name}')
-          st.toast(f'Arguments: {tool.function.arguments}')
+          print(f'Calling function: {tool.function.name}')
+          print(f'Arguments: {tool.function.arguments}')
           if asyncio.iscoroutinefunction(function_to_call):
             output = await function_to_call(**tool.function.arguments)
           else:
             output = function_to_call(**tool.function.arguments)
-          st.toast(f'Function output: {output}')
+          print(f'Function output: {output}')
           # add each tool result to messages
           messages.append({
             'role': 'tool',
@@ -109,95 +108,80 @@ async def process_model_response(
             'name': tool.function.name
           })
         else:
-          st.toast(f'Function {tool.function.name} not found')
+          print(f'Function {tool.function.name} not found')
       # continue the loop to let the model process tool results and decide next steps
       iteration += 1
     else:
       # no more tool calls - model has finished
-      st.toast(f'Assistant: {response.message.content}')
+      print(f'Assistant: {response.message.content}')
       break
   if iteration >= max_iterations:
-    st.toast(f"\n⚠️  Reached maximum iterations ({max_iterations}). Stopping auto-execution.")
+    print(f"\n⚠️  Reached maximum iterations ({max_iterations}). Stopping auto-execution.")
   return messages
 
 
-def create_vdb_if_needed():
+def create_vdb_if_needed() -> None:
+  """
+  Create the vector database if it does not already exist.
+  """
   VECTOR_DB_PATH = os.getenv("VECTOR_DB_PATH", "vectordb")
   DATASETS_PATH = os.getenv("DATASETS_PATH", "datasets")
   rag = RAG(VECTOR_DB_PATH)
   if not rag.collection.count():
-    st.toast("No data found in vector DB. Indexing documents...")
+    print("No data found in vector DB. Indexing documents...")
     rag.load(DATASETS_PATH)
     rag.chunk()
     rag.vector_store()
-    st.toast("Vector store ready.")
+    print("Vector store ready.")
   else:
-    st.toast(f"Loaded existing vector DB with {rag.collection.count()} entries.")
+    print(f"Loaded existing vector DB with {rag.collection.count()} entries.")
+
+
+@app.post("/api/v1/chat")
+async def chat(request: Request):
+  body = await request.json()
+  prompt = body.get("prompt", "").strip()
+  if not prompt:
+    return {"error": "Prompt is required."}
+
+  client = ollama.AsyncClient()
+  messages = [
+    {"role": "system", "content": get_system_prompt()},
+    {"role": "user", "content": prompt}
+  ]
+  messages = await process_model_response(client, messages)
+  return {"response": messages[-1]["content"]}
 
 
 async def main() -> None:
+  """
+  The main function.
+  """
   create_vdb_if_needed()
-  st.set_page_config(
-    page_title="neko",
-    page_icon="🐈",
-    layout="centered",
-    initial_sidebar_state="auto",
-    menu_items={
-      'Get Help': 'https://github.com/Fastiraz/neko/issues',
-      'Report a bug': "https://github.com/Fastiraz/neko/issues",
-      'About': "An agentic AI for red team tasks."
+  messages = [
+    {
+      'role': 'system',
+      'content': get_system_prompt(),
+    },
+    {
+      "role": "assistant",
+      "content": "What are we breaking today?"
     }
-  )
-
-  st.markdown("""
-  <style>
-    .stChatInput, .stChatInput:focus {
-      border-radius: 8px;
-    }
-    .st-emotion-cache-jmw8un {
-      background-color: #efb8fa !important;
-    }
-  </style>
-  """, unsafe_allow_html=True)
-
-  with st.sidebar:
-    st.title("🐈 | neko")
-    st.caption("by Fastiraz")
-    st.divider()
-    models = [model["model"] for model in ollama.list()["models"]]
-    st.session_state["model"] = st.selectbox("Choose your model", models)
-    os.environ['MODEL'] = st.session_state["model"]
-    st.divider()
-
-  st.title("💬 neko")
-  st.caption("An agentic AI for red team tasks.")
-
-  if "messages" not in st.session_state:
-    st.session_state["messages"] = [
-      {
-        'role': 'system',
-        'content': get_system_prompt(),
-      },
-      {
-        "role": "assistant",
-        "content": "What are we breaking today?"
-      }
-    ]
-
-  for msg in st.session_state.messages:
-    if msg["role"] in ["user", "assistant"]:
-      st.chat_message(msg["role"]).write(msg["content"])
-
-  if prompt := st.chat_input():
-    client = ollama.AsyncClient()
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
-    response = await process_model_response(
-      client,
-      st.session_state.messages
-    )
-    # st.session_state.messages.append({"role": "assistant", "content": msg})
-    st.chat_message("assistant").write(response[-1].content)
+  ]
+  print("Assistant:", messages[1]["content"])
+  while True:
+    try:
+      prompt = input("Enter a message... ➜ ")
+      if not prompt.strip():
+        continue
+      client = ollama.AsyncClient()
+      messages.append({"role": "user", "content": prompt})
+      messages = await process_model_response(client, messages)
+    except KeyboardInterrupt:
+      print("\nGoodbye!")
+      return
+    except Exception as e:
+      print(f"Error: {e}")
 
 
 if __name__ == "__main__":
