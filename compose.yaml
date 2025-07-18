@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  pocketbase:
+    build:
+      dockerfile: pocketbase.dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - pb_data:/pb/pb_data
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # react-app:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: reactapp.dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - pocketbase
+  #     - backend
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: core.dockerfile
+  #   ports:
+  #     - "1337:1337"
+  #   depends_on:
+  #     - pocketbase
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+  hackenv:
+    build:
+      dockerfile: hackenv.dockerfile
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  pb_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
