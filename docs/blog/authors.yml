@@ -1,0 +1,50 @@
+fastiraz:
+  name: Sabri Mechlaoui
+  title: Co-founder 0xCat and principal maintainer
+  url: https://fastiraz.github.io/whoami/
+  image_url: https://avatars.githubusercontent.com/u/92016718?v=4
+  page: # true
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-fastiraz-articles'
+  socials:
+    x: fastiraz
+    linkedin: fastiraz
+    github: fastiraz
+
+oxyde:
+  name: Alexy Da Costa
+  title: 0xCat Co-founder
+  url: https://github.com/oxydev2/
+  image_url: https://avatars.githubusercontent.com/u/46215222?v=4
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-oxyde-articles'
+  socials:
+    x: oxydev2
+    linkedin: Alexy DA COSTA
+    github: oxydev2
+
+flo:
+  name: Florian Papinutto
+  title: R&D engineer @ 0xCat
+  url: https://github.com/flo602/
+  image_url: https://cdn.discordapp.com/avatars/836164089322668062/6ca2d15968ccc0d49f40714c54e5760c.webp
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-flo-articles'
+  socials:
+    linkedin: Florian Papinutto
+    github: flo602
+
+kuba:
+  name: Kuba Stanislawski
+  title: Frontend developer @ 0xCat
+  url: https://github.com/Kuba93220
+  image_url: https://cdn.discordapp.com/avatars/420984391536345096/37aac1f86490a2c02d7af17b9851ebf3.webp
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-kuba-articles'
+  socials:
+    x: KubaStanislaws1
+    linkedin: Kuba Stanislawski
+    github: Kuba93220
