@@ -38,6 +38,21 @@ Neko is an autonomous AI agent specialized in offensive security. It combines th
 
 ---
 
+## Roadmap
+
+- MCP
+- GEOINT using Overpass Turbo and/or Plonk
+- Coding agent
+- Context summarizer
+- Smart memory management
+- Enhance web search with crawler
+- Better UI
+- - Structured messages
+- - Component for voice interaction
+- - File upload
+
+---
+
 <div align="center">
   <p><code>Coming soon...</code></p>
 </div>
