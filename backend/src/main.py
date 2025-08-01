@@ -12,6 +12,7 @@ from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
 from lib.tools.message import ask_user_tool
 from lib.tools.web_search import ddg_search
+from lib.tools.code import write_file, read_file, get_project_context
 from lib.utils.env import load_env, get_system_prompt
 
 
@@ -66,6 +67,9 @@ available_functions = {
   'rag_tool': rag_tool,
   'ask_user_tool': ask_user_tool,
   'ddg_search': ddg_search,
+  'get_project_context': get_project_context,
+  'read_file': read_file,
+  'write_file': write_file
 }
 
 
@@ -97,7 +101,10 @@ async def process_model_response(
         web_browser_tool,
         rag_tool,
         ask_user_tool,
-        ddg_search
+        ddg_search,
+        get_project_context,
+        read_file,
+        write_file
       ],
     )
     messages.append(response.message)
