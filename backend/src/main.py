@@ -60,7 +60,7 @@ def rag_tool(query: str) -> str:
   return response['response']
 
 
-available_functions = {
+available_tools = {
   'shell_tool': shell_tool,
   'hacking_tool': hacking_tool,
   'web_browser_tool': web_browser_tool,
@@ -95,23 +95,13 @@ async def process_model_response(
       model=os.environ.get('MODEL', 'deepseek-r1:14b').strip().strip('"'),
       messages=messages,
       think=False,
-      tools=[
-        shell_tool,
-        hacking_tool,
-        web_browser_tool,
-        rag_tool,
-        ask_user_tool,
-        ddg_search,
-        get_project_context,
-        read_file,
-        write_file
-      ],
+      tools=list(available_tools.values()),
     )
     messages.append(response.message)
     if response.message.tool_calls:
       print(f"\n--- Processing {len(response.message.tool_calls)} tool call(s) ---")
       for tool in response.message.tool_calls:
-        if function_to_call := available_functions.get(tool.function.name):
+        if function_to_call := available_tools.get(tool.function.name):
           print(f'Calling function: {tool.function.name}')
           print(f'Arguments: {tool.function.arguments}')
           if asyncio.iscoroutinefunction(function_to_call):
