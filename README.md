@@ -50,6 +50,7 @@ Neko is an autonomous AI agent specialized in offensive security. It combines th
 - - Structured messages
 - - Component for voice interaction
 - - File upload
+- AI Agent Tools Registry
 
 ---
 
