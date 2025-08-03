@@ -12,6 +12,7 @@ from lib.tools.rag import RAG
 from lib.tools.browser import web_browser_tool
 from lib.tools.message import ask_user_tool
 from lib.tools.web_search import ddg_search
+from lib.tools.code import write_file, read_file, get_project_context
 from lib.utils.env import load_env, get_system_prompt
 
 
@@ -59,13 +60,16 @@ def rag_tool(query: str) -> str:
   return response['response']
 
 
-available_functions = {
+available_tools = {
   'shell_tool': shell_tool,
   'hacking_tool': hacking_tool,
   'web_browser_tool': web_browser_tool,
   'rag_tool': rag_tool,
   'ask_user_tool': ask_user_tool,
   'ddg_search': ddg_search,
+  'get_project_context': get_project_context,
+  'read_file': read_file,
+  'write_file': write_file
 }
 
 
@@ -91,20 +95,13 @@ async def process_model_response(
       model=os.environ.get('MODEL', 'deepseek-r1:14b').strip().strip('"'),
       messages=messages,
       think=False,
-      tools=[
-        shell_tool,
-        hacking_tool,
-        web_browser_tool,
-        rag_tool,
-        ask_user_tool,
-        ddg_search
-      ],
+      tools=list(available_tools.values()),
     )
     messages.append(response.message)
     if response.message.tool_calls:
       print(f"\n--- Processing {len(response.message.tool_calls)} tool call(s) ---")
       for tool in response.message.tool_calls:
-        if function_to_call := available_functions.get(tool.function.name):
+        if function_to_call := available_tools.get(tool.function.name):
           print(f'Calling function: {tool.function.name}')
           print(f'Arguments: {tool.function.arguments}')
           if asyncio.iscoroutinefunction(function_to_call):
