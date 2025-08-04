@@ -23,7 +23,8 @@ The following is a list of shipped features:
   - [x] RAG for offensive security topics
   - [x] Browser use
   - [x] Message interaction with user
-  - [x] Web search (DuckDuckGo, Brave, Google, Tavily)
+  - [x] Web search (DuckDuckGo)
+  - [x] Coding agent
 
 ### Coming features
 
@@ -35,6 +36,15 @@ The following is a list of features we're working on:
   - [ ] **voice input/output:** Enable voice-based interaction with the LLM
   - [ ] **browser live view:** Displays agent activity and task execution in real time
   - [ ] **image input/output:** Allows uploading images as input and viewing generated visual output
+  - [ ] **File upload:** Allows uploading files
+- [ ] **MCP:** Use Model Context Protocol for tooling so we can use GUI apps
+- [ ] **GEOINT:** Use Overpass Turbo and/or Plonk to geolocate an image
+- [ ] **Context summarizer:** Save space in context
+- [ ] Smart memory management
+- [ ] **Open Telemetry and logging:** Implement observability features
+- [ ] **Crawler:** Enhance web search with crawling
+- [ ] **AI Agent Tools Registry:** An MCP tools hub to easily download and use community tools
+- [ ] **Database for conversations:** Save users conversations in a database
 
 ## Guide to the roadmap
 
