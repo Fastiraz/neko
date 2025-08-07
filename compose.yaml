@@ -66,7 +66,8 @@ services:
     build:
       dockerfile: comfyui.dockerfile
     ports:
-      - "8000:8000"
+      - "8188:8188"
+    platform: linux/arm64
     # deploy:
     #   resources:
     #     reservations:
