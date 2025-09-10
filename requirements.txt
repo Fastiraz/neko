@@ -1,0 +1,13 @@
+ollama
+chromadb
+mcp[cli]
+openai-whisper
+
+browser-use
+playwright
+langchain-ollama
+pydantic
+asyncio
+
+fastapi[standard]
+rich

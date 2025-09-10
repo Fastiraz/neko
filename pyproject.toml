@@ -1,0 +1,22 @@
+[project]
+name = "neko"
+version = "0.1.0-dev"
+description = "An agentic AI for red team tasks."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "asyncio>=3.4.3",
+    "browser-use>=0.1.23",
+    "chromadb>=0.5.23",
+    "crewai[tools]>=0.121.1",
+    "fastapi[standard]>=0.116.1",
+    "langchain-ollama>=0.3.0",
+    "mcp[cli]>=1.9.2",
+    "ollama>=0.5.1",
+    "openai-whisper>=20250625",
+    "playwright>=1.52.0",
+    "pydantic>=2.10.6",
+    "rich>=13.9.4",
+    "streamlit>=1.46.0",
+    "watchdog>=6.0.0",
+]
