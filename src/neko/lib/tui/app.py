@@ -53,7 +53,7 @@ Welcome to your interactive AI assistant! Here are some things you can do:
 
 ## Commands:
 - Type your message and press Enter
-- Use `quit`, `exit`, or `q` to exit
+- Use `quit` or `exit` to exit
 - Use `clear` to clear the screen
 - Use `help` to show this message again
     """
