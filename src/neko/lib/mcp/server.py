@@ -83,7 +83,7 @@ def ask_user_tool_mcp(message: str) -> str:
 @mcp.tool()
 def ddg_search_mcp(query: str) -> str:
   """
-  Search the web using DuckDuckGo.
+  Search the web using DuckDuckGo API.
 
   Args:
     query (str): The search query.

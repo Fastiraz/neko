@@ -140,25 +140,22 @@ def parse_page(html: Union[str, bytes]) -> List[ResultDict]:
     # Skip ads
     if 'badge--ad' in section:
       continue
-    try:
-      # Find title in h2 tag
-      title = re.search(r'<h2[^>]*>.*?>(.*?)</a>', section, re.DOTALL)
-      title = re.sub(r'<[^>]+>', '', title.group(1)).strip() if title else None
-      # Find description
-      desc = re.search(r'result__snippet[^>]*>(.*?)</a>', section, re.DOTALL)
-      description = re.sub(r'<[^>]+>', '', desc.group(1)).strip() if desc else None
-      # Find URL
-      url = re.search(r'result__url[^>]*href="([^"]*)"', section)
-      url = url.group(1) if url else None
+    # Find title in h2 tag
+    title = re.search(r'<h2[^>]*>.*?>(.*?)</a>', section, re.DOTALL)
+    title = re.sub(r'<[^>]+>', '', title.group(1)).strip() if title else None
+    # Find description
+    desc = re.search(r'result__snippet[^>]*>(.*?)</a>', section, re.DOTALL)
+    description = re.sub(r'<[^>]+>', '', desc.group(1)).strip() if desc else None
+    # Find URL
+    url = re.search(r'result__url[^>]*href="([^"]*)"', section)
+    url = url.group(1) if url else None
 
-      if title and description and url:
-        results.append(ResultDict(title=title, description=description, url=url))
-    except:
-      pass
+    if title and description and url:
+      results.append(ResultDict(title=title, description=description, url=url))
   return results
 
 
-def ddg_search(query: str) -> list:
+def ddg_search(query: str) -> str:
   """
   Make a web search using DuckDuckGo.
 
@@ -166,8 +163,8 @@ def ddg_search(query: str) -> list:
     query (str): The query to search for
 
   Returns:
-    list: A list of top 3 results that contains titles, urls and descriptions.
+    str: A list as a string of top 3 results that contains titles, urls and descriptions.
   """
   client = Client()
   results = client.search(query)
-  return results[:3]
+  return str(results[:3])
