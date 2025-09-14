@@ -39,7 +39,7 @@ class ConstantConfig:
   DATASETS_PATH: str = src_root_path_obj / "datasets"
 
   # LLM system prompt path
-  SYSTEM_PROMPT_PATH: str = src_root_path_obj / "knowledge/prompt.txt"
+  SYSTEM_PROMPT_PATH: str = NEKO_CONFIG_PATH / "knowledge/prompt.txt"
 
   # MCP server path
   MCP_SERVER_PATH: str = src_root_path_obj / "neko/lib/mcp/server.py"
