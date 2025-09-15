@@ -17,6 +17,7 @@ from neko.lib.tools.browser import web_browser_tool
 from neko.lib.tools.message import ask_user_tool
 from neko.lib.tools.web_search import ddg_search
 from neko.lib.utils.env import load_env
+from neko.config.settings import Settings
 
 
 load_env()
@@ -110,7 +111,7 @@ def rag_tool(prompt: str) -> str:
   if not context:
     system_context = f"{rag.system_prompt}\n\nNote: No relevant context was found for this query."
     response = ollama.generate(
-      model=os.environ.get('MODEL', 'deepseek-r1:14b').strip().strip('"'),
+      model=Settings.base_model,
       system=system_context,
       prompt=prompt,
       think=False

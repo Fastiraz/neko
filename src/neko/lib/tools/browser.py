@@ -8,6 +8,7 @@ from langchain_ollama import ChatOllama
 from browser_use import Agent, Browser, Controller, ActionResult, BrowserConfig
 from browser_use.agent.views import AgentHistoryList
 # from browser_use.agent.memory import MemoryConfig
+from ...config.settings import Settings
 
 
 SYSTEM_MESSAGE = """
@@ -85,14 +86,8 @@ async def web_browser_tool(prompt: str) -> AgentHistoryList:
   browser = Browser(config=config)
   # context = BrowserContext(browser=browser, config=config)
   llm = ChatOllama(
-    base_url=os.environ.get(
-      'OLLAMA_HOST',
-      'http://localhost:11434'
-    ).strip().strip('"'),
-    model=os.environ.get(
-      'BROWSER_MODEL',
-      'llama3.1:8b'
-    ).strip().strip('"'),
+    base_url=Settings.llm_provider_base_url,
+    model=Settings.browser_model,
     num_ctx=4096
   )
   # planner_llm = ChatOllama(

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import logging
 from typing import Optional, Any
 from contextlib import AsyncExitStack
@@ -12,6 +11,7 @@ from mcp.client.stdio import stdio_client
 import ollama
 
 from ..utils.env import load_env, get_system_prompt
+from ...config.settings import Settings
 
 
 load_env()
@@ -97,7 +97,7 @@ class MCPClient:
     iteration = 0
     while iteration < max_iterations:
       response: ollama.ChatResponse = await self.ollama.chat(
-        model=os.environ.get('MODEL', 'deepseek-r1:14b').strip().strip('"'),
+        model=Settings.base_model,
         messages=self.messages,
         think=False,
         tools=self.tools,
