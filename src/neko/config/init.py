@@ -23,7 +23,7 @@ class Config:
       with open(ConstantConfig.NEKO_CONFIG_FILE, 'w', encoding='utf-8') as file:
         file.write("""{
   "llm_provider_base_url": "http://localhost:11434",
-  "base_model": "qwen3:0.6b",
+  "base_model": "qwen3:8b",
   "embedding_model": "mxbai-embed-large:latest",
   "vision_model": "llava:7b",
   "coding_model": "qwen2.5-coder:14b",
