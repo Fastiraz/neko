@@ -33,10 +33,10 @@ class ConstantConfig:
   GITHUB_REPO: str = "Fastiraz/neko"
 
   # Vector database path
-  VECTOR_DB_PATH: str = src_root_path_obj / "vectordb"
+  VECTOR_DB_PATH: str = NEKO_CONFIG_PATH / "vectordb"
 
   # Datasets path
-  DATASETS_PATH: str = src_root_path_obj / "datasets"
+  DATASETS_PATH: str = NEKO_CONFIG_PATH / "datasets"
 
   # LLM system prompt path
   SYSTEM_PROMPT_PATH: str = NEKO_CONFIG_PATH / "knowledge/prompt.txt"
