@@ -8,21 +8,22 @@ from browser_use import (
   ChatOllama,
   Controller,
   ActionResult,
+  BrowserProfile,
 )
 from browser_use.agent.views import AgentHistoryList
 
 
-SYSTEM_MESSAGE = """
-You are a profesional pentester. Your goal is to find vulnerabilities manually. Test every inputs of the website and every parameters in URL.
-Once you found it, explain me why it's vulnerable, which payload have you use and which result do you have.
-Test for SQL injection, XSS, SSTI...
-When you find a vulnerability, stop.
-"""
 EXTEND_SYSTEM_MESSAGE = """
 You are a profesional pentester. Your goal is to find vulnerabilities manually. Test every inputs of the website and every parameters in URL.
 Once you found it, explain me why it's vulnerable, which payload have you use and which result do you have.
-Test for SQL injection, XSS, SSTI...
+Test for SQL injection, XSS, SSTI, CSRF...
 When you find a vulnerability, stop.
+"""
+SPEED_OPTIMIZATION_PROMPT = """
+Speed optimization instructions:
+- Be extremely concise and direct in your responses
+- Get to the goal as quickly as possible
+- Use multi-action sequences whenever possible to reduce steps
 """
 controller = Controller()
 
@@ -46,10 +47,12 @@ def ask_human(question: str) -> ActionResult:
 
 
 async def web_browser_tool(prompt: str) -> AgentHistoryList:
-  # Initialize tools
   tools = Tools()
-
-  # Create agent with MCP-enabled tools
+  browser_profile = BrowserProfile(
+    minimum_wait_page_load_time=0.1,
+    wait_between_actions=0.1,
+    headless=False,
+  )
   agent = Agent(
     task=prompt,
     llm = ChatOllama(
@@ -59,9 +62,11 @@ async def web_browser_tool(prompt: str) -> AgentHistoryList:
     tools=tools,
     controller=controller,
     # use_vision=True,
+    flash_mode=True,
+    browser_profile=browser_profile,
+    extend_system_message=f"{EXTEND_SYSTEM_MESSAGE}\n\n{SPEED_OPTIMIZATION_PROMPT}",
   )
 
-  # Run the agent
   try:
     history = await agent.run()
     print("\nSession summary:")
