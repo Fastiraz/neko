@@ -10,45 +10,11 @@ wheels/
 .venv
 
 # Environments variables
-.env
+.env*
 
 # Common
 .ropeproject
 .zed
 .vscode
 .editorconfig
-
-# Frontend
-frontend/node_modules
-frontend/out
-frontend/dist
-frontend/*.tgz
-frontend/coverage
-frontend/*.lcov
-frontend/logs
-frontend/_.log
-frontend/report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
-frontend/.env
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
-frontend/.env.local
-frontend/.eslintcache
-frontend/.cache
-frontend/*.tsbuildinfo
-frontend/.gitignore
-
-# Docs
-docs/node_modules
-docs/build
-docs/.docusaurus
-docs/.cache-loader
-docs/.DS_Store
-docs/.env.local
-docs/.env.development.local
-docs/.env.test.local
-docs/.env.production.local
-docs/npm-debug.log*
-docs/yarn-debug.log*
-docs/yarn-error.log*
-docs/.gitignore
+*.log
