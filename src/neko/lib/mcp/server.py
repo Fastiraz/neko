@@ -2,15 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-import os
-
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-import ollama
 from mcp.server.fastmcp import FastMCP
-
 from neko.lib.tools.shell import shell_tool, hacking_tool
 from neko.lib.tools.rag import RAG
 from neko.lib.tools.browser import web_browser_tool
@@ -18,7 +14,6 @@ from neko.lib.tools.message import ask_user_tool
 from neko.lib.tools.web_search import ddg_search
 from neko.lib.tools.code import read_file, write_file
 from neko.lib.utils.env import load_env
-from neko.config.settings import Settings
 
 
 load_env()
@@ -42,7 +37,7 @@ def shell_tool_mcp(command: str) -> str:
 
 
 @mcp.tool()
-async def browser_tool(prompt: str) -> str:
+async def browser_tool(prompt: str):
   """
   This function allow an AI agent to perform tasks on a browser.
 
@@ -141,9 +136,6 @@ def write_file_tool(
   Returns:
     bool: True if successful, False otherwise.
   """
-  # keep_code = input(f"Keep? [yes/no]\n\x1b[48;5;235m\x1b[94mFile: `{file_path}`\nContent: {content}\nMode: `{mode}`\x1b[0m\n> ")
-  # if keep_code.lower().strip() != 'yes':
-  #   return False
   return write_file(file_path, content, mode)
 
 
