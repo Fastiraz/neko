@@ -5,7 +5,6 @@ openai-whisper
 
 browser-use
 playwright
-langchain-ollama
 pydantic
 asyncio
 
