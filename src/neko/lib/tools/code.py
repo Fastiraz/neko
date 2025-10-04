@@ -41,9 +41,6 @@ def write_file(
   Returns:
     bool: True if successful, False otherwise.
   """
-  keep_code = input(f"Keep? [yes/no]\n\x1b[48;5;235m\x1b[94mFile: `{file_path}`\nContent: {content}\nMode: `{mode}`\x1b[0m\n> ")
-  if keep_code.lower().strip() != 'yes':
-    return "Modifications rejected by the user."
   try:
     with open(file_path, mode, encoding='utf-8') as f:
       f.write(content)

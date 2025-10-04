@@ -14,7 +14,7 @@ from ...config.settings import Settings as NekoSettings
 
 
 class RAG:
-  def __init__(self, vectordb: str = ConstantConfig.VECTOR_DB_PATH) -> None:
+  def __init__(self, vectordb: str = str(ConstantConfig.VECTOR_DB_PATH)) -> None:
     self.datasets = []
     self.documents = []
     self.chunks = []
@@ -25,6 +25,11 @@ class RAG:
       settings=Settings(anonymized_telemetry=False)
     )
     self.collection = self.client.get_or_create_collection(name="docs")
+    self.system_prompt = (
+      "You are a helpful assistant. Use the retrieved documents as context "
+      "to answer the user's query. If the context is empty, answer from your "
+      "general knowledge and explicitly mention that no context was found."
+    )
 
 
   def load(self, directory: str = ConstantConfig.DATASETS_PATH, allowed_extensions: List[str] = None) -> List[str]:

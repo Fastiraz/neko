@@ -16,6 +16,7 @@ from neko.lib.tools.rag import RAG
 from neko.lib.tools.browser import web_browser_tool
 from neko.lib.tools.message import ask_user_tool
 from neko.lib.tools.web_search import ddg_search
+from neko.lib.tools.code import read_file, write_file
 from neko.lib.utils.env import load_env
 from neko.config.settings import Settings
 
@@ -95,36 +96,69 @@ def ddg_search_mcp(query: str) -> str:
   return ddg_search(query)
 
 
-@mcp.resource("greeting://{prompt}")
+@mcp.tool()
 def rag_tool(prompt: str) -> str:
   """
-  Combines retrieval and generation with improved prompt formatting.
+  RAG retrieval.
 
   Args:
-    prompt (str): The user prompt for the LLM.
+    prompt: The user query for the LLM.
 
   Returns:
-    str: The LLM's response.
+    Context so the LLM can works with.
   """
   rag = RAG()
+  rag.load()
+  rag.chunk()
+  rag.vector_store()
   context = rag.retrieval(prompt=prompt)
   if not context:
-    system_context = f"{rag.system_prompt}\n\nNote: No relevant context was found for this query."
-    response = ollama.generate(
-      model=Settings.base_model,
-      system=system_context,
-      prompt=prompt,
-      think=False
+    system_context = (
+      f"{rag.system_prompt}\n\n"
+      "Note: No relevant context was found for this query."
     )
-    return response['response']
+    return system_context
   context_text = "\n\n---\n\n".join(context)
   system_context = f"{rag.system_prompt}\n\nContext information:\n{context_text}"
-  response = ollama.generate(
-    model=os.environ.get('MODEL', 'deepseek-r1:14b').strip().strip('"'),
-    system=system_context,
-    prompt=prompt
-  )
-  return response['response']
+  print(system_context)
+  return system_context
+
+
+@mcp.tool()
+def write_file_tool(
+  file_path: str,
+  content: str,
+  mode: str = 'w'
+) -> bool:
+  """
+  This function allow the AI agent to write into a file.
+
+  Args:
+    file_path (str): The file path to write into.
+    content (str): The content to write to the file.
+    mode (str): File mode ('w' for write, 'a' for append). Default is 'w'.
+
+  Returns:
+    bool: True if successful, False otherwise.
+  """
+  # keep_code = input(f"Keep? [yes/no]\n\x1b[48;5;235m\x1b[94mFile: `{file_path}`\nContent: {content}\nMode: `{mode}`\x1b[0m\n> ")
+  # if keep_code.lower().strip() != 'yes':
+  #   return False
+  return write_file(file_path, content, mode)
+
+
+@mcp.tool()
+def read_file_tool(file_path: str) -> str:
+  """
+  Utility function to read a file and return its content.
+
+  Args:
+    file_path (str): Path to the file to read.
+
+  Returns:
+    str: File content if successful, None if failed.
+  """
+  return read_file(file_path)
 
 
 if __name__ == "__main__":
