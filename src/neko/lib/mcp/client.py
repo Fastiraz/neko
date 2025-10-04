@@ -10,11 +10,10 @@ from mcp.client.stdio import stdio_client
 
 import ollama
 
-from ..utils.env import load_env, get_system_prompt
+from ..utils.env import get_system_prompt
 from ...config.settings import Settings
 
 
-load_env()
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='neko.log', level=logging.INFO)
 

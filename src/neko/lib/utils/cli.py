@@ -16,16 +16,14 @@ from ...config.constants import ConstantConfig
 class CLIHandler:
   """Handles command-line interface operations."""
 
-  def __init__(self, tui_func, load_env_func):
+  def __init__(self, tui_func):
     """
     Initialize CLI handler with required functions.
 
     Args:
       tui_func: Function to run the chat loop.
-      load_env_func: Function to load environment variables.
     """
     self.tui = tui_func
-    self.load_env = load_env_func
 
   def _serve_api(self, host: str = "127.0.0.1", port: int = 1337) -> None:
     """
@@ -117,18 +115,16 @@ Examples:
 
   async def run(self) -> None:
     """Main entry point for CLI operations."""
-    self.load_env()
     await self.handle_command()
 
 
-def create_cli_handler(tui_func, load_env_func) -> CLIHandler:
+def create_cli_handler(tui_func) -> CLIHandler:
   """Factory function to create a CLI handler.
 
   Args:
     tui_func: Function to run the chat loop.
-    load_env_func: Function to load environment variables.
 
   Returns:
     Configured CLIHandler instance.
   """
-  return CLIHandler(tui_func, load_env_func)
+  return CLIHandler(tui_func)

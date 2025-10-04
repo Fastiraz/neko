@@ -13,10 +13,8 @@ from neko.lib.tools.browser import web_browser_tool
 from neko.lib.tools.message import ask_user_tool
 from neko.lib.tools.web_search import ddg_search
 from neko.lib.tools.code import read_file, write_file
-from neko.lib.utils.env import load_env
 
 
-load_env()
 mcp = FastMCP("neko")
 
 
