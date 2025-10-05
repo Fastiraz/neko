@@ -10,7 +10,7 @@ import ollama
 import re
 from time import time
 from ...config.constants import ConstantConfig
-from ...config.settings import Settings as NekoSettings
+from ...config.settings import Settings as AkioSettings
 
 
 class RAG:
@@ -131,7 +131,7 @@ class RAG:
     """
     try:
       result = ollama.embed(
-        model=NekoSettings.embedding_model,
+        model=AkioSettings.embedding_model,
         input=text
       )
       embeddings = result["embeddings"]

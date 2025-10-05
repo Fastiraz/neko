@@ -13,7 +13,7 @@ from .lib.tui.app import tui
 def main() -> None:
   create_vdb_if_needed()
   logging.basicConfig(
-    filename='neko.log',
+    filename='akio.log',
     level=logging.INFO,
     # format='[%(asctime)s] %(levelname)s - %(message)s',
   )

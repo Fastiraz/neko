@@ -15,7 +15,7 @@ from ...config.settings import Settings
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='neko.log', level=logging.INFO)
+logging.basicConfig(filename='akio.log', level=logging.INFO)
 
 
 class MCPClient:

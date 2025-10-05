@@ -15,12 +15,12 @@ class Config:
     self.create_knowledge()
 
   def create_config_folder(self) -> None:
-    if not os.path.exists(ConstantConfig.NEKO_CONFIG_PATH):
-      os.makedirs(ConstantConfig.NEKO_CONFIG_PATH)
+    if not os.path.exists(ConstantConfig.AKIO_CONFIG_PATH):
+      os.makedirs(ConstantConfig.AKIO_CONFIG_PATH)
 
   def create_config_file(self) -> None:
-    if not os.path.exists(ConstantConfig.NEKO_CONFIG_FILE):
-      with open(ConstantConfig.NEKO_CONFIG_FILE, 'w', encoding='utf-8') as file:
+    if not os.path.exists(ConstantConfig.AKIO_CONFIG_FILE):
+      with open(ConstantConfig.AKIO_CONFIG_FILE, 'w', encoding='utf-8') as file:
         file.write("""{
   "llm_provider_base_url": "http://localhost:11434",
   "base_model": "qwen3:8b",
@@ -38,7 +38,7 @@ class Config:
     if not os.path.exists(ConstantConfig.SYSTEM_PROMPT_PATH):
       os.makedirs(os.path.dirname(ConstantConfig.SYSTEM_PROMPT_PATH), exist_ok=True)
       with open(ConstantConfig.SYSTEM_PROMPT_PATH, 'a', encoding='utf-8') as file:
-        file.write("""You are Neko, an autonomous red team AI agent developed by 0xcat.
+        file.write("""You are Akio, an autonomous red team AI agent developed by 0xcat.
 
 You operate with root privileges inside a sandboxed containerized environment packed with offensive security tools. You carry out red teaming operations independently and strategically. You think critically, adapt continuously, and act with purpose. You are clever, sarcastically fun, and a little chaotic — but always with operational discipline.
 
@@ -88,7 +88,7 @@ You don’t wait for permission to be excellent.
 
 ---
 
-You are Neko. Built for the shadows. Born to break things. Let’s cause some trouble.""")
+You are Akio. Built for the shadows. Born to break things. Let’s cause some trouble.""")
 
 
 def init() -> None:
