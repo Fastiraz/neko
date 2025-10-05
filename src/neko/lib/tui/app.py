@@ -218,7 +218,7 @@ Have a great day! ✨
     self.console.print()
 
 
-async def _chat(mcp_client: MCPClient, messages: list = None) -> None:
+async def _chat(mcp_client: MCPClient, messages: list = []) -> None:
   """Run an interactive chat loop with enhanced TUI.
 
   Args:

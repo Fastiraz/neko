@@ -60,7 +60,7 @@ async def web_browser_tool(prompt: str) -> AgentHistoryList:
       model=Settings.browser_model,
     ),
     tools=tools,
-    controller=controller,
+    # controller=controller,
     # use_vision=True,
     flash_mode=True,
     browser_profile=browser_profile,
