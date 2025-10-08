@@ -38,33 +38,64 @@ env:
   UV_CACHE_DIR: ~/.cache/uv
 
 jobs:
-  ruff:
-    name: 🧹 Ruff Linting & Formatting
-    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
-    steps:
-      - uses: actions/checkout@v4
+  # ruff:
+  #   name: 🧹 Ruff Linting & Formatting
+  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+  #   steps:
+  #     - uses: actions/checkout@v4
       
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          version: ${{ github.event.inputs.uv_version || 'latest' }}
+  #     - name: Install uv
+  #       uses: astral-sh/setup-uv@v5
+  #       with:
+  #         enable-cache: true
+  #         cache-dependency-glob: "uv.lock"
+  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
       
-      - name: Set up Python
-        run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+  #     - name: Set up Python
+  #       run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
       
-      - name: Install dependencies
-        run: uv sync --all-extras --dev
+  #     - name: Install dependencies
+  #       run: uv sync --all-extras --dev
       
-      - name: Ruff Check
-        run: uvx ruff check --exclude "${{ github.event.inputs.exclude_dirs || env.DEFAULT_EXCLUDE_DIRS }}" --output-format github .
+  #     - name: Ruff Check
+  #       run: uvx ruff check --exclude "${{ github.event.inputs.exclude_dirs || env.DEFAULT_EXCLUDE_DIRS }}" --output-format github .
       
-      - name: Ruff Format Check
-        run: uvx ruff format --check .
+  #     - name: Ruff Format Check
+  #       run: uvx ruff format --check .
 
-  bandit:
-    name: 🔒 Bandit Security Scan
+  # bandit:
+  #   name: 🔒 Bandit Security Scan
+  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+      
+  #     - name: Install uv
+  #       uses: astral-sh/setup-uv@v5
+  #       with:
+  #         enable-cache: true
+  #         cache-dependency-glob: "uv.lock"
+  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
+      
+  #     - name: Set up Python
+  #       run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+      
+  #     - name: Install dependencies
+  #       run: uv sync --all-extras --dev
+      
+  #     - name: Run Bandit
+  #       run: |
+  #         uvx bandit -r . -f json -o bandit-report.json --exit-zero
+  #         uvx bandit -r . -ll
+      
+  #     - name: Upload Bandit Report
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: bandit-report
+  #         path: bandit-report.json
+
+  pip-audit:
+    name: 🔍 Pip-Audit Vulnerability Scan
     runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
@@ -82,102 +113,71 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --dev
       
-      - name: Run Bandit
-        run: |
-          uvx bandit -r . -f json -o bandit-report.json --exit-zero
-          uvx bandit -r . -ll
+      - name: Run Pip-Audit
+        run: uvx pip-audit --format json --output pip-audit.json
+        continue-on-error: true
       
-      - name: Upload Bandit Report
+      - name: Upload Pip-Audit Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bandit-report
-          path: bandit-report.json
+          name: pip-audit-report
+          path: pip-audit.json
 
-  # pip-audit:
-  #   name: 🔍 Pip-Audit Vulnerability Scan
-  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
-  #   steps:
-  #     - uses: actions/checkout@v4
+  trufflehog:
+    name: 🔑 TruffleHog Secret Scan
+    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v5
-  #       with:
-  #         enable-cache: true
-  #         cache-dependency-glob: "uv.lock"
-  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ github.event.inputs.uv_version || 'latest' }}
       
-  #     - name: Set up Python
-  #       run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
-      
-  #     - name: Install dependencies
-  #       run: uv sync --all-extras --dev
-      
-  #     - name: Run Pip-Audit
-  #       run: uvx pip-audit --format json --output pip-audit.json
-  #       continue-on-error: true
-      
-  #     - name: Upload Pip-Audit Report
-  #       uses: actions/upload-artifact@v4
-  #       if: always()
-  #       with:
-  #         name: pip-audit-report
-  #         path: pip-audit.json
+      - name: Run TruffleHog
+        run: uvx trufflehog filesystem . --json --fail --no-update
 
-  # trufflehog:
-  #   name: 🔑 TruffleHog Secret Scan
-  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+  coverage:
+    name: ✅ Tests & Coverage
+    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
       
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v5
-  #       with:
-  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+          version: ${{ github.event.inputs.uv_version || 'latest' }}
       
-  #     - name: Run TruffleHog
-  #       run: uvx trufflehog filesystem . --json --fail --no-update
-
-  # coverage:
-  #   name: ✅ Tests & Coverage
-  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
-  #   steps:
-  #     - uses: actions/checkout@v4
+      - name: Set up Python
+        run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
       
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v5
-  #       with:
-  #         enable-cache: true
-  #         cache-dependency-glob: "uv.lock"
-  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
       
-  #     - name: Set up Python
-  #       run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+      - name: Run Tests with Coverage
+        run: |
+          uvx pytest \
+            --cov=. \
+            --cov-report=xml \
+            --cov-report=term \
+            --junitxml=pytest-report.xml
       
-  #     - name: Install dependencies
-  #       run: uv sync --all-extras --dev
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
       
-  #     - name: Run Tests with Coverage
-  #       run: |
-  #         uvx pytest \
-  #           --cov=. \
-  #           --cov-report=xml \
-  #           --cov-report=term \
-  #           --junitxml=pytest-report.xml
-      
-  #     - name: Upload Coverage to Codecov
-  #       uses: codecov/codecov-action@v4
-  #       with:
-  #         files: ./coverage.xml
-  #         fail_ci_if_error: false
-      
-  #     - name: Upload Test Reports
-  #       uses: actions/upload-artifact@v4
-  #       if: always()
-  #       with:
-  #         name: test-reports
-  #         path: |
-  #           coverage.xml
-  #           pytest-report.xml
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            coverage.xml
+            pytest-report.xml
