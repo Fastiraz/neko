@@ -84,8 +84,8 @@ jobs:
       
       - name: Run Bandit
         run: |
-          uv run bandit -r . -f json -o bandit-report.json --exit-zero
-          uv run bandit -r . -ll
+          uvx bandit -r . -f json -o bandit-report.json --exit-zero
+          uvx bandit -r . -ll
       
       - name: Upload Bandit Report
         uses: actions/upload-artifact@v4
@@ -114,7 +114,7 @@ jobs:
   #       run: uv sync --all-extras --dev
       
   #     - name: Run Pip-Audit
-  #       run: uv run pip-audit --format json --output pip-audit.json
+  #       run: uvx pip-audit --format json --output pip-audit.json
   #       continue-on-error: true
       
   #     - name: Upload Pip-Audit Report
@@ -161,7 +161,7 @@ jobs:
       
   #     - name: Run Tests with Coverage
   #       run: |
-  #         uv run pytest \
+  #         uvx pytest \
   #           --cov=. \
   #           --cov-report=xml \
   #           --cov-report=term \
