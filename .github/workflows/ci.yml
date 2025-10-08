@@ -63,36 +63,36 @@ jobs:
       - name: Ruff Format Check
         run: uvx ruff format --check .
 
-  # bandit:
-  #   name: 🔒 Bandit Security Scan
-  #   runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
-  #   steps:
-  #     - uses: actions/checkout@v4
+  bandit:
+    name: 🔒 Bandit Security Scan
+    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
       
-  #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v5
-  #       with:
-  #         enable-cache: true
-  #         cache-dependency-glob: "uv.lock"
-  #         version: ${{ github.event.inputs.uv_version || 'latest' }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+          version: ${{ github.event.inputs.uv_version || 'latest' }}
       
-  #     - name: Set up Python
-  #       run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+      - name: Set up Python
+        run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
       
-  #     - name: Install dependencies
-  #       run: uv sync --all-extras --dev
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
       
-  #     - name: Run Bandit
-  #       run: |
-  #         uv run bandit -r . -f json -o bandit-report.json --exit-zero
-  #         uv run bandit -r . -ll
+      - name: Run Bandit
+        run: |
+          uv run bandit -r . -f json -o bandit-report.json --exit-zero
+          uv run bandit -r . -ll
       
-  #     - name: Upload Bandit Report
-  #       uses: actions/upload-artifact@v4
-  #       if: always()
-  #       with:
-  #         name: bandit-report
-  #         path: bandit-report.json
+      - name: Upload Bandit Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-report
+          path: bandit-report.json
 
   # pip-audit:
   #   name: 🔍 Pip-Audit Vulnerability Scan
