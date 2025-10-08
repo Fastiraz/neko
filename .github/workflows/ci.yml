@@ -116,6 +116,10 @@ jobs:
       - name: Run Pip-Audit
         run: uvx pip-audit --format json --output pip-audit.json
         continue-on-error: true
+
+      - name: Display pip-audit results
+        run: uvx pip-audit --desc
+        continue-on-error: true
       
       - name: Upload Pip-Audit Report
         uses: actions/upload-artifact@v4
@@ -132,13 +136,10 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: TruffleHog Secrets Scan
+        uses: trufflesecurity/trufflehog@main
         with:
-          version: ${{ github.event.inputs.uv_version || 'latest' }}
-      
-      - name: Run TruffleHog
-        run: uvx trufflehog filesystem . --json --fail --no-update
+          extra_args: --only-verified
 
   coverage:
     name: ✅ Tests & Coverage
@@ -148,36 +149,13 @@ jobs:
       
       - name: Install uv
         uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          version: ${{ github.event.inputs.uv_version || 'latest' }}
       
-      - name: Set up Python
-        run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
       
       - name: Install dependencies
         run: uv sync --all-extras --dev
       
       - name: Run Tests with Coverage
-        run: |
-          uvx pytest \
-            --cov=. \
-            --cov-report=xml \
-            --cov-report=term \
-            --junitxml=pytest-report.xml
-      
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./coverage.xml
-          fail_ci_if_error: false
-      
-      - name: Upload Test Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-reports
-          path: |
-            coverage.xml
-            pytest-report.xml
+        run: uvx pytest --cov=. --cov-report=term
