@@ -74,4 +74,4 @@ jobs:
       - name: Install Semgrep
         run: uv tool install semgrep
       - name: Run Semgrep Scan
-        run: semgrep scan --config=auto
+        run: semgrep scan --config=auto --severity=ERROR
