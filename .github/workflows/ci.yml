@@ -74,4 +74,16 @@ jobs:
       - name: Install Semgrep
         run: uv tool install semgrep
       - name: Run Semgrep Scan
-        run: semgrep scan --config=auto --severity=ERROR
+        run: semgrep scan --config=auto
+
+  osv-scanner:
+    name: 🔍 OSV Vulnerability Scanner
+    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run OSV Scanner
+        uses: google/osv-scanner-action@v2.2.3
+        with:
+          scan-args: |-
+            --recursive
+            ./
