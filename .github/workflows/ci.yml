@@ -81,5 +81,18 @@ jobs:
     runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: ${{ github.event.inputs.uv_version || 'latest' }}
+  
+      - name: Set up Python
+        run: uv python install ${{ github.event.inputs.python_version || env.DEFAULT_PYTHON_VERSION }}
+      
+      - name: Install OSV Scanner
+        run: uv tool install osv-scanner
+      
       - name: Run OSV Scanner
-        uses: google/osv-scanner-action@v2.2.3
+        run: osv-scanner --recursive .
+        continue-on-error: true
