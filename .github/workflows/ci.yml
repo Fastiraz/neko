@@ -83,7 +83,3 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run OSV Scanner
         uses: google/osv-scanner-action@v2.2.3
-        with:
-          scan-args: |-
-            --recursive
-            ./
