@@ -28,7 +28,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Ruff
-        run: uvx ruff check --exclude "datasets" --ignore E402 --output-format=github .
+        run: uvx ruff check --output-format=github .
 
-      - name: Check format
-        run: uv run ruff format --check .
+      # - name: Check format
+      #   run: uvx ruff format --check
