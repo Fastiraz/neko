@@ -1,0 +1,22 @@
+name: OSV-Scanner
+
+on:
+  release:
+    types: [published]
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  merge_group:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  security-events: write
+  contents: read
+
+jobs:
+  osv:
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.2.3"
+
